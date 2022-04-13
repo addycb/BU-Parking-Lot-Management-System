@@ -16,7 +16,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -45,6 +49,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private LatLng orange3;
     private LatLng orange4;
     private LatLng granby;
+    MarkerOptions Agganis;
+    MarkerOptions Langsam;
+    MarkerOptions Buick;
+    MarkerOptions CFA;
+    MarkerOptions Essex;
+    MarkerOptions LowerBridge;
+    MarkerOptions UpperBridge;
+    MarkerOptions CAS;
+    MarkerOptions Warren;
+    MarkerOptions FiveSeventyFive;
+    MarkerOptions Rafik;
+    MarkerOptions Kenmore;
+    MarkerOptions SevenThirty_SevenFifty;
+    MarkerOptions SevenSixtySix;
+    MarkerOptions EightNinety;
+    MarkerOptions Orange1;
+    MarkerOptions Orange2;
+    MarkerOptions Orange3;
+    MarkerOptions Orange4;
+    MarkerOptions Granby;
     LocalTime time;
     Calendar calendar;
 
@@ -86,7 +110,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
 
         // Time now
-        time = LocalTime.now();
+        //time = LocalTime.now();
+        time = LocalTime.of(12,0);
 
         // Day of week
         calendar = Calendar.getInstance();
@@ -97,7 +122,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng bu = new LatLng(42.351139402544476, -71.10977147739284);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(bu,14.0f));
 
-        // assign locations (latitude/longitude) of lots
+        // Setting a custom info window adapter for the google map
+        MarkerInfoWindowAdapter markerInfoWindowAdapter = new MarkerInfoWindowAdapter(getApplicationContext());
+        googleMap.setInfoWindowAdapter(markerInfoWindowAdapter);
+
+        // initializing locations of lots
         agganis = new LatLng(42.352355809859226, -71.11772127450622);
         langsam = new LatLng(42.35331905254574, -71.1228019601163);
         buick = new LatLng(42.35210382678141, -71.11502725640673);
@@ -118,6 +147,29 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         orange3 = new LatLng(42.34788127817424, -71.10331807360758);
         orange4 = new LatLng(42.34880365168017, -71.10709471778706);
         granby = new LatLng(42.348908184482376, -71.09799848954573);
+
+
+        // initializing markers
+        Agganis = new MarkerOptions().position(agganis).title("Agganis Arena").snippet("Address: 925 Commonwealth Avenue \nentrance on Harry Agganis Way");
+        Langsam = new MarkerOptions().position(langsam).title("Langsam Garage").snippet("Address: 142 Gardner Street");
+        Buick = new MarkerOptions().position(buick).title("Buick Street Lot").snippet("Address: 25 Buick Street");
+        CFA = new MarkerOptions().position(cfa).title("CFA Lot").snippet("Address: 855 Commonwealth Avenue \nentrance on Harry Agganis Way");
+        Essex = new MarkerOptions().position(essex).title("Essex Street Garage & Lot").snippet("Address: 148 Essex Street");
+        LowerBridge = new MarkerOptions().position(lowerbridge).title("Lower Bridge Lot").snippet("Address: 3 University Road");
+        UpperBridge = new MarkerOptions().position(upperbridge).title("Upper Bridge Lot").snippet("Address: 1 University Road");
+        CAS = new MarkerOptions().position(cas).title("CAS Lot").snippet("Address: 240 Bay State Road");
+        Warren = new MarkerOptions().position(warren).title("Warren Towers Garage").snippet("Address: 700 Commonwealth Avenue \nentrance on Hinsdale Mall");
+        FiveSeventyFive = new MarkerOptions().position(fiveseventyfive).title("575 Commonwealth Avenue");
+        Rafik = new MarkerOptions().position(rafik).title("Rafik B. Hariri Building Garage").snippet("Address: 595 Commonwealth Avenue");
+        Kenmore = new MarkerOptions().position(kenmore).title("Kenmore Lot").snippet("Address: 549 Commonwealth Avenue");
+        SevenThirty_SevenFifty = new MarkerOptions().position(seventhirtysevenfifty).title("730/750 Commonwealth Avenue");
+        SevenSixtySix = new MarkerOptions().position(sevensixtysix).title("766 Commonwealth Avenue");
+        EightNinety = new MarkerOptions().position(eightninety).title("890 Commonwealth Avenue").snippet("entrance on Dummer Street");
+        Orange1 = new MarkerOptions().position(orange1).title("Street Parking").snippet("Address: 29-47 Buswell Street \nSpaces: 22");
+        Orange2 = new MarkerOptions().position(orange2).title("Street Parking").snippet("Address: 2 -22 Buswell Street \nSpaces: 17");
+        Orange3 = new MarkerOptions().position(orange3).title("Street Parking").snippet("Address: 46 Mountfort Street \nSpaces: 3");
+        Orange4 = new MarkerOptions().position(orange4).title("Street Parking").snippet("Address: 830-824 Mountfort Street \nSpaces: 9");
+        Granby = new MarkerOptions().position(granby).title("Granby Lot").snippet("Address: 665 Commonwealth Avenue");
 
         displayMarkers(time, day_of_week);
 
@@ -156,124 +208,70 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             } else if (permitType.equals("Red Sox")) {
                 guestRedSox();
             } else if (permitType.equals("Non-Event")) {
-                guestNonEvent();
+                guestNonEvent(time,day_of_week);
             }
         }
     }
 
     /* START OF HELPER FUNCTIONS TO DISPLAY MARKERS*/
     public void allMarkers(){
-        mMap.addMarker(new MarkerOptions().position(agganis).title("Agganis Arena"));
-        mMap.addMarker(new MarkerOptions().position(langsam).title("Langsam Garage"));
-        mMap.addMarker(new MarkerOptions().position(buick).title("Buick Street Lot"));
-        mMap.addMarker(new MarkerOptions().position(cfa).title("CFA Lot"));
-        mMap.addMarker(new MarkerOptions().position(essex).title("Essex Street Garage & Lot"));
-        mMap.addMarker(new MarkerOptions().position(lowerbridge).title("Lower Bridge Lot"));
-        mMap.addMarker(new MarkerOptions().position(upperbridge).title("Upper Bridge Lot"));
-        mMap.addMarker(new MarkerOptions().position(cas).title("CAS Lot"));
-        mMap.addMarker(new MarkerOptions().position(warren).title("Warren Towers Garage"));
-        mMap.addMarker(new MarkerOptions().position(fiveseventyfive).title("575 Commonwealth Avenue"));
-        mMap.addMarker(new MarkerOptions().position(rafik).title("Rafik B. Hariri Building Garage"));
-        mMap.addMarker(new MarkerOptions().position(kenmore).title("Kenmore Lot"));
-        mMap.addMarker(new MarkerOptions().position(seventhirtysevenfifty).title("730/750 Commonwealth Avenue"));
-        mMap.addMarker(new MarkerOptions().position(sevensixtysix).title("766 Commonwealth Avenue"));
-        mMap.addMarker(new MarkerOptions().position(eightninety).title("890 Commonwealth Avenue"));
-        mMap.addMarker(new MarkerOptions().position(orange1).title("Street Parking"));
-        mMap.addMarker(new MarkerOptions().position(orange2).title("Street Parking"));
-        mMap.addMarker(new MarkerOptions().position(orange3).title("Street Parking"));
-        mMap.addMarker(new MarkerOptions().position(orange4).title("Street Parking"));
-        mMap.addMarker(new MarkerOptions().position(granby).title("Granby Lot"));
-
-
+        List<MarkerOptions> allMarkers = Arrays.asList(Agganis,Langsam,Buick,CFA,Essex,LowerBridge,UpperBridge,CAS,Warren,FiveSeventyFive,Rafik,Kenmore,SevenThirty_SevenFifty,SevenSixtySix,EightNinety,Orange1,Orange2,Orange3,Orange4,Granby);
+        for (MarkerOptions marker : allMarkers){
+            mMap.addMarker(marker);
+        }
     }
-    public void employeeCommuter(){
-        mMap.addMarker(new MarkerOptions().position(agganis).title("Agganis Arena"));
-        mMap.addMarker(new MarkerOptions().position(langsam).title("Langsam Garage"));
-        mMap.addMarker(new MarkerOptions().position(buick).title("Buick Street Lot"));
-        mMap.addMarker(new MarkerOptions().position(cfa).title("CFA Lot"));
-        mMap.addMarker(new MarkerOptions().position(essex).title("Essex Street Garage & Lot"));
-        mMap.addMarker(new MarkerOptions().position(lowerbridge).title("Lower Bridge Lot"));
-        mMap.addMarker(new MarkerOptions().position(upperbridge).title("Upper Bridge Lot"));
-        mMap.addMarker(new MarkerOptions().position(cas).title("CAS Lot"));
-        mMap.addMarker(new MarkerOptions().position(warren).title("Warren Towers Garage"));
-        mMap.addMarker(new MarkerOptions().position(fiveseventyfive).title("575 Commonwealth Avenue"));
-        mMap.addMarker(new MarkerOptions().position(rafik).title("Rafik B. Hariri Building Garage"));
-        mMap.addMarker(new MarkerOptions().position(kenmore).title("Kenmore Lot"));
-        mMap.addMarker(new MarkerOptions().position(seventhirtysevenfifty).title("730/750 Commonwealth Avenue"));
-        mMap.addMarker(new MarkerOptions().position(sevensixtysix).title("766 Commonwealth Avenue"));
-        mMap.addMarker(new MarkerOptions().position(eightninety).title("890 Commonwealth Avenue"));
+    public void employeeCommuter() {
+        List<MarkerOptions> allMarkers = Arrays.asList(Agganis, Langsam, Buick, CFA, Essex, LowerBridge, UpperBridge, CAS, Warren, FiveSeventyFive, Rafik, Kenmore, SevenThirty_SevenFifty, SevenSixtySix, EightNinety);
+        for (MarkerOptions marker : allMarkers) {
+            mMap.addMarker(marker);
+        }
     }
-    public void employeeFlex(){
-        mMap.addMarker(new MarkerOptions().position(agganis).title("Agganis Arena"));
-        mMap.addMarker(new MarkerOptions().position(langsam).title("Langsam Garage"));
-        mMap.addMarker(new MarkerOptions().position(buick).title("Buick Street Lot"));
-        mMap.addMarker(new MarkerOptions().position(cfa).title("CFA Lot"));
-        mMap.addMarker(new MarkerOptions().position(essex).title("Essex Street Garage & Lot"));
-        mMap.addMarker(new MarkerOptions().position(lowerbridge).title("Lower Bridge Lot"));
-        mMap.addMarker(new MarkerOptions().position(upperbridge).title("Upper Bridge Lot"));
-        mMap.addMarker(new MarkerOptions().position(cas).title("CAS Lot"));
-        mMap.addMarker(new MarkerOptions().position(warren).title("Warren Towers Garage"));
-        mMap.addMarker(new MarkerOptions().position(fiveseventyfive).title("575 Commonwealth Avenue"));
-        mMap.addMarker(new MarkerOptions().position(rafik).title("Rafik B. Hariri Building Garage"));
-        mMap.addMarker(new MarkerOptions().position(kenmore).title("Kenmore Lot"));
-        mMap.addMarker(new MarkerOptions().position(seventhirtysevenfifty).title("730/750 Commonwealth Avenue"));
-        mMap.addMarker(new MarkerOptions().position(sevensixtysix).title("766 Commonwealth Avenue"));
-        mMap.addMarker(new MarkerOptions().position(eightninety).title("890 Commonwealth Avenue"));
+    public void employeeFlex() {
+        List<MarkerOptions> allMarkers = Arrays.asList(Agganis,Langsam,Buick,CFA,Essex,LowerBridge,UpperBridge,CAS,Warren,FiveSeventyFive,Rafik,Kenmore,SevenThirty_SevenFifty,SevenSixtySix,EightNinety);
+        for (MarkerOptions marker : allMarkers){
+            mMap.addMarker(marker);
+        }
     }
     public void employeeOffPeakCommuter(LocalTime time, int day){
         if (day > 5 || time.isAfter(LocalTime.of(2,30,0))){
-            mMap.addMarker(new MarkerOptions().position(agganis).title("Agganis Arena"));
-            mMap.addMarker(new MarkerOptions().position(langsam).title("Langsam Garage"));
-            mMap.addMarker(new MarkerOptions().position(buick).title("Buick Street Lot"));
-            mMap.addMarker(new MarkerOptions().position(cfa).title("CFA Lot"));
-            mMap.addMarker(new MarkerOptions().position(essex).title("Essex Street Garage & Lot"));
-            mMap.addMarker(new MarkerOptions().position(lowerbridge).title("Lower Bridge Lot"));
-            mMap.addMarker(new MarkerOptions().position(upperbridge).title("Upper Bridge Lot"));
-            mMap.addMarker(new MarkerOptions().position(cas).title("CAS Lot"));
-            mMap.addMarker(new MarkerOptions().position(warren).title("Warren Towers Garage"));
-            mMap.addMarker(new MarkerOptions().position(fiveseventyfive).title("575 Commonwealth Avenue"));
-            mMap.addMarker(new MarkerOptions().position(rafik).title("Rafik B. Hariri Building Garage"));
-            mMap.addMarker(new MarkerOptions().position(kenmore).title("Kenmore Lot"));
-            mMap.addMarker(new MarkerOptions().position(seventhirtysevenfifty).title("730/750 Commonwealth Avenue"));
-            mMap.addMarker(new MarkerOptions().position(sevensixtysix).title("766 Commonwealth Avenue"));
-            mMap.addMarker(new MarkerOptions().position(eightninety).title("890 Commonwealth Avenue"));
+            List<MarkerOptions> allMarkers = Arrays.asList(Agganis,Langsam,Buick,CFA,Essex,LowerBridge,UpperBridge,CAS,Warren,FiveSeventyFive,Rafik,Kenmore,SevenThirty_SevenFifty,SevenSixtySix,EightNinety);
+            for (MarkerOptions marker : allMarkers) {
+                mMap.addMarker(marker);
+            }
         }
     }
     public void employeeCarpool(){
-        mMap.addMarker(new MarkerOptions().position(agganis).title("Agganis Arena"));
-        mMap.addMarker(new MarkerOptions().position(langsam).title("Langsam Garage"));
-        mMap.addMarker(new MarkerOptions().position(essex).title("Essex Street Garage & Lot"));
-        mMap.addMarker(new MarkerOptions().position(cas).title("CAS Lot"));
-        mMap.addMarker(new MarkerOptions().position(warren).title("Warren Towers Garage"));
-        mMap.addMarker(new MarkerOptions().position(rafik).title("Rafik B. Hariri Building Garage"));
+        List<MarkerOptions> allMarkers = Arrays.asList(Agganis,Langsam,Essex,CAS,Warren,Rafik);
+        for (MarkerOptions marker : allMarkers) {
+            mMap.addMarker(marker);
+        }
     }
     public void studentFlex(LocalTime time, int day){
-        mMap.addMarker(new MarkerOptions().position(agganis).title("Agganis Arena"));
-        mMap.addMarker(new MarkerOptions().position(langsam).title("Langsam Garage"));
-        mMap.addMarker(new MarkerOptions().position(essex).title("Essex Street Garage & Lot"));
         if (day > 5 || time.isAfter(LocalTime.of(15,0,0))) {
             // weekends or after 3pm
-            mMap.addMarker(new MarkerOptions().position(cas).title("CAS Lot"));
-            mMap.addMarker(new MarkerOptions().position(warren).title("Warren Towers Garage"));
-            mMap.addMarker(new MarkerOptions().position(rafik).title("Rafik B. Hariri Building Garage"));
+            List<MarkerOptions> allMarkers = Arrays.asList(Agganis, Langsam, Essex, CAS, Warren, Rafik);
+            for (MarkerOptions marker : allMarkers) {
+                mMap.addMarker(marker);
+            }
+        } else {
+            List<MarkerOptions> allMarkers = Arrays.asList(Agganis,Langsam,Essex);
+            for (MarkerOptions marker : allMarkers){
+                mMap.addMarker(marker);
+            }
         }
-
     }
     public void studentCommuter(LocalTime time, int day){
-        mMap.addMarker(new MarkerOptions().position(agganis).title("Agganis Arena"));
-        mMap.addMarker(new MarkerOptions().position(langsam).title("Langsam Garage"));
-        mMap.addMarker(new MarkerOptions().position(essex).title("Essex Street Garage & Lot"));
         if (day > 5 || time.isAfter(LocalTime.of(15,0,0))) {
             // weekends or after 3pm
-            mMap.addMarker(new MarkerOptions().position(buick).title("Buick Street Lot"));
-            mMap.addMarker(new MarkerOptions().position(cfa).title("CFA Lot"));
-            mMap.addMarker(new MarkerOptions().position(lowerbridge).title("Lower Bridge Lot"));
-            mMap.addMarker(new MarkerOptions().position(upperbridge).title("Upper Bridge Lot"));
-            mMap.addMarker(new MarkerOptions().position(cas).title("CAS Lot"));
-            mMap.addMarker(new MarkerOptions().position(warren).title("Warren Towers Garage"));
-            mMap.addMarker(new MarkerOptions().position(fiveseventyfive).title("575 Commonwealth Avenue"));
-            mMap.addMarker(new MarkerOptions().position(rafik).title("Rafik B. Hariri Building Garage"));
-            mMap.addMarker(new MarkerOptions().position(seventhirtysevenfifty).title("730/750 Commonwealth Avenue"));
+            List<MarkerOptions> allMarkers = Arrays.asList(Agganis,Langsam,Essex,CAS,Warren,Rafik,Buick,FiveSeventyFive,SevenThirty_SevenFifty,UpperBridge,LowerBridge,CFA);
+            for (MarkerOptions marker : allMarkers) {
+                mMap.addMarker(marker);
+            }
+        } else {
+            List<MarkerOptions> allMarkers = Arrays.asList(Agganis,Langsam,Essex);
+            for (MarkerOptions marker : allMarkers){
+                mMap.addMarker(marker);
+            }
         }
 
 
@@ -281,51 +279,62 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void studentEvening(LocalTime time, int day){
         if (day > 5 || time.isAfter(LocalTime.of(15,0,0))) {
             // weekends or after 3pm
-            mMap.addMarker(new MarkerOptions().position(agganis).title("Agganis Arena"));
-            mMap.addMarker(new MarkerOptions().position(langsam).title("Langsam Garage"));
-            mMap.addMarker(new MarkerOptions().position(buick).title("Buick Street Lot"));
-            mMap.addMarker(new MarkerOptions().position(cfa).title("CFA Lot"));
-            mMap.addMarker(new MarkerOptions().position(essex).title("Essex Street Garage & Lot"));
-            mMap.addMarker(new MarkerOptions().position(lowerbridge).title("Lower Bridge Lot"));
-            mMap.addMarker(new MarkerOptions().position(upperbridge).title("Upper Bridge Lot"));
-            mMap.addMarker(new MarkerOptions().position(cas).title("CAS Lot"));
-            mMap.addMarker(new MarkerOptions().position(warren).title("Warren Towers Garage"));
-            mMap.addMarker(new MarkerOptions().position(fiveseventyfive).title("575 Commonwealth Avenue"));
-            mMap.addMarker(new MarkerOptions().position(rafik).title("Rafik B. Hariri Building Garage"));
-            mMap.addMarker(new MarkerOptions().position(kenmore).title("Kenmore Lot"));
-            mMap.addMarker(new MarkerOptions().position(seventhirtysevenfifty).title("730/750 Commonwealth Avenue"));
-            mMap.addMarker(new MarkerOptions().position(sevensixtysix).title("766 Commonwealth Avenue"));
-            mMap.addMarker(new MarkerOptions().position(eightninety).title("890 Commonwealth Avenue"));
+            List<MarkerOptions> allMarkers = Arrays.asList(Agganis,Langsam,Buick,CFA,Essex,LowerBridge,UpperBridge,CAS,Warren,FiveSeventyFive,Rafik,Kenmore,SevenThirty_SevenFifty,SevenSixtySix,EightNinety);
+            for (MarkerOptions marker : allMarkers){
+                mMap.addMarker(marker);
+            }
         }
     }
     public void studentLangsam(){
-        mMap.addMarker(new MarkerOptions().position(langsam).title("Langsam Garage"));
+        mMap.addMarker(Langsam);
     }
     public void studentOrange(){
-        mMap.addMarker(new MarkerOptions().position(orange1).title("Street Parking"));
-        mMap.addMarker(new MarkerOptions().position(orange2).title("Street Parking"));
-        mMap.addMarker(new MarkerOptions().position(orange3).title("Street Parking"));
-        mMap.addMarker(new MarkerOptions().position(orange4).title("Street Parking"));
+        List<MarkerOptions> allMarkers = Arrays.asList(Orange1,Orange2,Orange3,Orange4);
+        for (MarkerOptions marker : allMarkers){
+            mMap.addMarker(marker);
+        }
     }
     public void guestAgganis(){
-        mMap.addMarker(new MarkerOptions().position(agganis).title("Agganis Arena"));
-        mMap.addMarker(new MarkerOptions().position(langsam).title("Langsam Garage"));
-        mMap.addMarker(new MarkerOptions().position(buick).title("Buick Street Lot"));
-        mMap.addMarker(new MarkerOptions().position(cfa).title("CFA Lot"));
-        mMap.addMarker(new MarkerOptions().position(essex).title("Essex Street Garage & Lot"));
+        List<MarkerOptions> allMarkers = Arrays.asList(Agganis,Langsam,Buick,CFA,Essex);
+        for (MarkerOptions marker : allMarkers){
+            mMap.addMarker(marker);
+        }
     }
     public void guestRedSox(){
-        mMap.addMarker(new MarkerOptions().position(warren).title("Warren Towers Garage"));
-        mMap.addMarker(new MarkerOptions().position(fiveseventyfive).title("575 Commonwealth Avenue"));
-        mMap.addMarker(new MarkerOptions().position(rafik).title("Rafik B. Hariri Building Garage"));
-        mMap.addMarker(new MarkerOptions().position(kenmore).title("Kenmore Lot"));
-        mMap.addMarker(new MarkerOptions().position(granby).title("Granby Lot"));
-        mMap.addMarker(new MarkerOptions().position(sevensixtysix).title("766 Commonwealth Avenue"));
+        List<MarkerOptions> allMarkers = Arrays.asList(Warren,FiveSeventyFive,Rafik,Kenmore,SevenSixtySix,Granby);
+        for (MarkerOptions marker : allMarkers){
+            mMap.addMarker(marker);
+        }
     }
-    public void guestNonEvent(){
-        mMap.addMarker(new MarkerOptions().position(agganis).title("Agganis Arena"));
-        mMap.addMarker(new MarkerOptions().position(langsam).title("Langsam Garage"));
-        mMap.addMarker(new MarkerOptions().position(kenmore).title("Kenmore Lot"));
-    }
+    public void guestNonEvent(LocalTime time, int day_of_week){
+        List<MarkerOptions> allMarkers = new ArrayList<>();
+        if(time.isAfter(LocalTime.of(15,0)) || day_of_week == 6){
+            Agganis.snippet("Address: 925 Commonwealth Avenue \nentrance on Harry Agganis Way \nPrice: $12 flat rate \nOpen to public");
+            Langsam.snippet("Address: 142 Gardner Street \nPrice: $12 flat rate \nShort term overnight parking permitted \nOpen to public");
+            Kenmore.snippet("Address: 549 Commonwealth Avenue \nPrice: $12 flat rate \nOpen to public");
+        } else if (day_of_week == 7){
+            Agganis.snippet("Address: 925 Commonwealth Avenue \nentrance on Harry Agganis Way\n Price: $25 max for over 3 hours \nOpen to public");
+            Langsam.snippet("Address: 142 Gardner Street \nPrice:  \n Short term overnight parking permitted \nOpen to public");
+            Kenmore.snippet("Address: 549 Commonwealth Avenue \nPrice: $12 flat rate \nOpen to public");
+        } else {
+            Agganis.snippet("Address: 925 Commonwealth Avenue \nentrance on Harry Agganis Way \nPrice: $25 max for over 3 hours \nOpen to public");
+            Langsam.snippet("Address: 142 Gardner Street \nPrice:  \nShort term overnight parking permitted \nOpen to public");
+            Kenmore.snippet("Address: 549 Commonwealth Avenue \nPrice: $13 per half hour, $17 max \nOpen to public");
+        }
+
+
+        if (time.isAfter(LocalTime.of(7,0))&& time.isBefore(LocalTime.of(23,0))) {
+            Collections.addAll(allMarkers,Agganis,Langsam);
+        }
+        if (day_of_week <= 5 && time.isAfter(LocalTime.of(7,0))&& time.isBefore(LocalTime.of(23,0))) {
+            Collections.addAll(allMarkers,Kenmore);
+        }
+        for (MarkerOptions marker : allMarkers) {
+            mMap.addMarker(marker);
+        }
+   }
     /* END OF HELPER FUNCTIONS TO DISPLAY MARKERS*/
 }
+
+
+
